@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -29,8 +31,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import location_app.hadia.com.locationapp.R;
+import location_app.hadia.com.locationapp.list_feature.LocationListActivity;
 import location_app.hadia.com.locationapp.model.GooglePlace;
 import location_app.hadia.com.locationapp.place_details.PlaceDetailsActivity;
 import nucleus.factory.RequiresPresenter;
@@ -46,7 +51,8 @@ public class MapsActivity extends NucleusFragmentActivity<MapPresenterImpl> impl
     ProgressDialog progress;
     double latitude;
     double longitude;
-
+@BindView(R.id.list_btn)
+    Button listBtn;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
@@ -325,8 +331,14 @@ public class MapsActivity extends NucleusFragmentActivity<MapPresenterImpl> impl
         if (progress != null)
             dismssProgressDiolag();
         ;
+        listBtn.setVisibility(View.VISIBLE);
 
-
+    }
+    @OnClick(R.id.list_btn)
+    void onClick(View v) {
+        Intent intent = new Intent(getBaseContext(), LocationListActivity.class);
+        // Starting the Place Details Activity
+        startActivity(intent);
     }
 
 

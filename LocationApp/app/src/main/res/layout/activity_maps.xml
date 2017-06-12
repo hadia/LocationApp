@@ -16,6 +16,8 @@
         android:gravity="bottom">
 
         <Button
+            android:id="@+id/list_btn"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@mipmap/ic_format_list_bulleted_black_18dp" />

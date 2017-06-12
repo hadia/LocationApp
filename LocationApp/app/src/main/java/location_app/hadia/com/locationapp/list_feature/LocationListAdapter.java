@@ -1,10 +1,12 @@
 package location_app.hadia.com.locationapp.list_feature;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -13,6 +15,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import location_app.hadia.com.locationapp.R;
 import location_app.hadia.com.locationapp.model.GooglePlace;
 
@@ -27,10 +30,13 @@ import location_app.hadia.com.locationapp.model.GooglePlace;
 public class LocationListAdapter extends RecyclerView.Adapter <LocationListAdapter.LocationViewHolder>{
 
     List<GooglePlace> location;
-    public LocationListAdapter(List<GooglePlace> location) {
+    private final OnItemClickListener listener;
 
-        
-            this.location = location;
+    public LocationListAdapter(List<GooglePlace> location, OnItemClickListener listener) {
+
+        this.listener = listener;
+
+        this.location = location;
         
     }
 
@@ -45,6 +51,7 @@ public class LocationListAdapter extends RecyclerView.Adapter <LocationListAdapt
     public void onBindViewHolder(LocationViewHolder holder, int position) {
         holder.locatonName.setText(location.get(position).getName());
         holder.locatonAdress.setText(location.get(position).getName());
+        holder.bind(location.get(position), listener);
 
         if (!location.get(position).getIconURL().isEmpty()) {
             Picasso.with(holder.itemView.getContext())
@@ -66,11 +73,22 @@ public class LocationListAdapter extends RecyclerView.Adapter <LocationListAdapt
         @BindView(R.id.place_photo)
         ImageView locatonPhoto;
 
+        @BindView(R.id.list_layout)
+        RelativeLayout layout;
         LocationViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
 
+        }
+
+        public void bind(final GooglePlace item, final OnItemClickListener listener) {
+
+            layout.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
         }
     }
 
