@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">LocationApp</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_place_details">Place</string>
+    <string name="name">Name</string>
+    <string name="address">Address</string>
+    <string name="phone">Phone</string>
+    <string name="rate">Rate</string>
+    <string name="category">Category</string>
+    <string name="sub_category">Sub category</string>
+</resources>
