@@ -3,10 +3,10 @@ package location_app.hadia.com.locationapp.get_foursquare_response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
 
-import location_app.hadia.com.locationapp.common.MfpModel;
+import location_app.hadia.com.locationapp.common.responseModel;
 
 @Generated("com.robohorse.robopojogenerator")
-public class Contact extends MfpModel {
+public class Contact extends responseModel {
 
 	@JsonProperty("twitter")
 	private String twitter;

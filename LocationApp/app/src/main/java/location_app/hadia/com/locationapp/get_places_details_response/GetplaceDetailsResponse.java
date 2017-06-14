@@ -4,10 +4,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
 
-import location_app.hadia.com.locationapp.common.MfpModel;
+import location_app.hadia.com.locationapp.common.responseModel;
 
 @Generated("com.robohorse.robopojogenerator")
-public class GetplaceDetailsResponse extends MfpModel {
+public class GetplaceDetailsResponse extends responseModel {
 
 	@JsonProperty("result")
 	private Result result;

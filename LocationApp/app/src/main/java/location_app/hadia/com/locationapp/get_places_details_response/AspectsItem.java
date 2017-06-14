@@ -3,10 +3,10 @@ package location_app.hadia.com.locationapp.get_places_details_response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
 
-import location_app.hadia.com.locationapp.common.MfpModel;
+import location_app.hadia.com.locationapp.common.responseModel;
 
 @Generated("com.robohorse.robopojogenerator")
-public class AspectsItem extends MfpModel {
+public class AspectsItem extends responseModel {
 
 	@JsonProperty("rating")
 	private int rating;

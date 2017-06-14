@@ -3,10 +3,10 @@ package location_app.hadia.com.locationapp.get_places_details_response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
 
-import location_app.hadia.com.locationapp.common.MfpModel;
+import location_app.hadia.com.locationapp.common.responseModel;
 
 @Generated("com.robohorse.robopojogenerator")
-public class Open extends MfpModel {
+public class Open extends responseModel {
 
 	@JsonProperty("time")
 	private String time;
