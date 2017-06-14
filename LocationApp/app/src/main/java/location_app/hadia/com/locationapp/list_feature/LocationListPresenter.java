@@ -37,6 +37,7 @@ public class LocationListPresenter extends Presenter<LocationListActivity> {
     protected void onTakeView(LocationListActivity locationListActivity) {
         super.onTakeView(locationListActivity);
         if(getView()!=null)
-            getView().bindLocations(cache.getGooglePlaces());
+            getView().bindLocations(cache.getGooglePlaces(),cache.getSquarePlaces());
+
     }
 }

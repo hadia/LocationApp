@@ -12,4 +12,5 @@ public interface MapPresenter {
 
     public void requetGoogleRestaurant(double latitude, double longitude);
 
+
 }

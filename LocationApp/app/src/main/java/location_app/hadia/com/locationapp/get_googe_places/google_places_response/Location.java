@@ -3,8 +3,10 @@ package location_app.hadia.com.locationapp.get_googe_places.google_places_respon
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
 
+import location_app.hadia.com.locationapp.common.MfpModel;
+
 @Generated("com.robohorse.robopojogenerator")
-public class Location{
+public class Location extends MfpModel {
 
 	@JsonProperty("lng")
 	private double lng;

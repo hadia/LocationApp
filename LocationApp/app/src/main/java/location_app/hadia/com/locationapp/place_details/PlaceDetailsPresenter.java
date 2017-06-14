@@ -10,5 +10,6 @@ package location_app.hadia.com.locationapp.place_details;
 
 public interface PlaceDetailsPresenter {
     public void requetGoogleRestaurant(String placeID);
-    public void openMap();
+    public void requetFoursquare(String placeID);
+    public void openMap(boolean isGoogle);
 }

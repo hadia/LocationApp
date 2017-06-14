@@ -4,8 +4,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
 
+import location_app.hadia.com.locationapp.common.MfpModel;
+
 @Generated("com.robohorse.robopojogenerator")
-public class PhotosItem{
+public class PhotosItem extends MfpModel {
 
 	@JsonProperty("photo_reference")
 	private String photoReference;

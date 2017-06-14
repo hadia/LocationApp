@@ -1,23 +1,26 @@
 package location_app.hadia.com.locationapp.list_feature;
 
-import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+        import android.content.Intent;
+        import android.support.v7.widget.RecyclerView;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.ImageView;
+        import android.widget.RelativeLayout;
+        import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+        import com.squareup.picasso.Picasso;
 
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import location_app.hadia.com.locationapp.R;
-import location_app.hadia.com.locationapp.model.GooglePlace;
+        import butterknife.BindView;
+        import butterknife.ButterKnife;
+        import butterknife.OnClick;
+        import location_app.hadia.com.locationapp.R;
+        import location_app.hadia.com.locationapp.model.FourSquarePlace;
+        import location_app.hadia.com.locationapp.model.GooglePlace;
+        import location_app.hadia.com.locationapp.model.PlaceModel;
 
 /**
  * Created by Hadia .
@@ -29,15 +32,20 @@ import location_app.hadia.com.locationapp.model.GooglePlace;
 
 public class LocationListAdapter extends RecyclerView.Adapter <LocationListAdapter.LocationViewHolder>{
 
-    List<GooglePlace> location;
+    ArrayList<PlaceModel> locationList;
     private final OnItemClickListener listener;
 
-    public LocationListAdapter(List<GooglePlace> location, OnItemClickListener listener) {
+
+    public LocationListAdapter(List<GooglePlace> location, List<FourSquarePlace> fourSquarePlacesList, OnItemClickListener listener) {
 
         this.listener = listener;
 
-        this.location = location;
-        
+        this.locationList =new ArrayList<>();
+        locationList.addAll(location);
+        locationList.addAll(fourSquarePlacesList);
+
+
+
     }
 
     @Override
@@ -49,20 +57,23 @@ public class LocationListAdapter extends RecyclerView.Adapter <LocationListAdapt
 
     @Override
     public void onBindViewHolder(LocationViewHolder holder, int position) {
-        holder.locatonName.setText(location.get(position).getName());
-        holder.locatonAdress.setText(location.get(position).getName());
-        holder.bind(location.get(position), listener);
 
-        if (!location.get(position).getIconURL().isEmpty()) {
+        holder.locatonName.setText(locationList.get(position).getName());
+        holder.locatonAdress.setText(locationList.get(position).getVicinity());
+
+        holder.bind( locationList.get(position), listener);
+
+        if (!locationList.get(position).getIconURL().isEmpty()) {
             Picasso.with(holder.itemView.getContext())
-                    .load(location.get(position).getIconURL())
+                    .load(locationList.get(position).getIconURL())
                     .into(holder.locatonPhoto);
         }
+
     }
 
     @Override
     public int getItemCount() {
-        return location.size();
+        return (locationList.size());
     }
 
     public static class LocationViewHolder extends RecyclerView.ViewHolder {
@@ -82,7 +93,7 @@ public class LocationListAdapter extends RecyclerView.Adapter <LocationListAdapt
 
         }
 
-        public void bind(final GooglePlace item, final OnItemClickListener listener) {
+        public void bind(final PlaceModel item, final OnItemClickListener listener) {
 
             layout.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
@@ -90,6 +101,7 @@ public class LocationListAdapter extends RecyclerView.Adapter <LocationListAdapt
                 }
             });
         }
+
     }
 
     @Override
@@ -97,3 +109,4 @@ public class LocationListAdapter extends RecyclerView.Adapter <LocationListAdapt
         super.onAttachedToRecyclerView(recyclerView);
     }
 }
+

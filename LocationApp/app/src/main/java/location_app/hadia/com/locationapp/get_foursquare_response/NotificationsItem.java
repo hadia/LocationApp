@@ -1,4 +1,4 @@
-package location_app.hadia.com.locationapp.get_places_details_response;
+package location_app.hadia.com.locationapp.get_foursquare_response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
@@ -6,20 +6,20 @@ import javax.annotation.Generated;
 import location_app.hadia.com.locationapp.common.MfpModel;
 
 @Generated("com.robohorse.robopojogenerator")
-public class AspectsItem extends MfpModel {
+public class NotificationsItem  extends MfpModel {
 
-	@JsonProperty("rating")
-	private int rating;
+	@JsonProperty("item")
+	private Item item;
 
 	@JsonProperty("type")
 	private String type;
 
-	public void setRating(int rating){
-		this.rating = rating;
+	public void setItem(Item item){
+		this.item = item;
 	}
 
-	public int getRating(){
-		return rating;
+	public Item getItem(){
+		return item;
 	}
 
 	public void setType(String type){
@@ -33,8 +33,8 @@ public class AspectsItem extends MfpModel {
 	@Override
  	public String toString(){
 		return 
-			"AspectsItem{" + 
-			"rating = '" + rating + '\'' + 
+			"NotificationsItem{" + 
+			"item = '" + item + '\'' + 
 			",type = '" + type + '\'' + 
 			"}";
 		}

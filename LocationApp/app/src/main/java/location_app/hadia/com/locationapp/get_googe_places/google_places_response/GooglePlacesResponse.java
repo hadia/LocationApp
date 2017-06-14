@@ -4,8 +4,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.annotation.Generated;
 
+import location_app.hadia.com.locationapp.common.MfpModel;
+
 @Generated("com.robohorse.robopojogenerator")
-public class GooglePlacesResponse{
+public class GooglePlacesResponse extends MfpModel {
 
 	@JsonProperty("next_page_token")
 	private String nextPageToken;

@@ -39,6 +39,8 @@ public class PlaceDetailsActivity extends NucleusAppCompatActivity<PlaceDetailsP
     ProgressDialog progress;
     @BindView(R.id.place_details_photo)
     ImageView placePhoto;
+    boolean isGoogle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +48,14 @@ public class PlaceDetailsActivity extends NucleusAppCompatActivity<PlaceDetailsP
         setContentView(R.layout.activity_details);
         ButterKnife.bind(this);
         //Log.d("onClick", getIntent().getStringExtra("placeId"));
-
-        getPresenter().requetGoogleRestaurant(getIntent().getStringExtra("reference"));
-        showProgressDiolag();
+        isGoogle = getIntent().getBooleanExtra("isGoogle", true);
+//        if (isGoogle)
+//            getPresenter().requetGoogleRestaurant(getIntent().getStringExtra("reference"));
+//        else
+//            getPresenter().requetFoursquare(getIntent().getStringExtra("reference"));
+       showProgressDiolag();
     }
+
     public void showProgressDiolag() {
         progress = new ProgressDialog(this);
         progress.setTitle("Loading");
@@ -60,8 +66,10 @@ public class PlaceDetailsActivity extends NucleusAppCompatActivity<PlaceDetailsP
     }
 
     public void dismssProgressDiolag() {
+        if(progress!=null)
         progress.dismiss();
     }
+
     public void bindPhone(String phone) {
         phoneTv.setText(phone);
     }
@@ -76,7 +84,7 @@ public class PlaceDetailsActivity extends NucleusAppCompatActivity<PlaceDetailsP
 
     @OnClick(R.id.place_details_Address)
     void onClick(View v) {
-        getPresenter().openMap();
+        getPresenter().openMap(isGoogle);
     }
 
     public void bindCategory(String category) {

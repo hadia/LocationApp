@@ -1,31 +1,34 @@
 package location_app.hadia.com.locationapp.map_feature;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.inject.Inject;
 
-import location_app.hadia.com.locationapp.R;
 import location_app.hadia.com.locationapp.common.DownloadUrl;
 import location_app.hadia.com.locationapp.common.Interactor;
-import location_app.hadia.com.locationapp.common.InteractorListener;
-import location_app.hadia.com.locationapp.common.InteractorSuccessListener;
-import location_app.hadia.com.locationapp.get_googe_places.google_places_response.GooglePlacesResponse;
+import location_app.hadia.com.locationapp.get_foursquare_response.GetFourSquareResponse;
 import location_app.hadia.com.locationapp.model.AppCache.AppCache;
 import location_app.hadia.com.locationapp.model.dependencies.AppInjector;
 
+/**
+ * Created by Hadia .
+ * IBM
+ *
+ * @author Hadia
+ *         on 6/14/17.
+ */
 
-public class GetNearbyPlacesData extends Interactor {
+public class GetFourSquarePlaceData  extends Interactor {
 
     @Inject
     AppCache cache;
-    String googlePlacesData;
-   // GoogleMap mMap;
+    String fourPlacesData;
+    // GoogleMap mMap;
     String url;
 
     private double lng;
@@ -34,7 +37,7 @@ public class GetNearbyPlacesData extends Interactor {
     private int PROXIMITY_RADIUS = 10000;
 
 
-    public GetNearbyPlacesData(double lat,double lng) {
+    public GetFourSquarePlaceData(double lat,double lng) {
 
 
         cache = AppInjector.getAppComponent().getAppCache();
@@ -49,12 +52,12 @@ public class GetNearbyPlacesData extends Interactor {
             //mMap = (GoogleMap) params[0];
             url =getUrl(lat,lng);
             DownloadUrl downloadUrl = new DownloadUrl();
-            googlePlacesData = downloadUrl.readUrl(url);
+            fourPlacesData = downloadUrl.readUrl(url);
             Log.d("GooglePlacesReadTask", "doInBackground Exit");
         } catch (Exception e) {
             Log.d("GooglePlacesReadTask", e.toString());
         }
-        return googlePlacesData;
+        return fourPlacesData;
 
     }
 
@@ -62,9 +65,9 @@ public class GetNearbyPlacesData extends Interactor {
     protected void onPostExecute(Object result) {
         super.onPostExecute(result);
         ObjectMapper objectMapper = new ObjectMapper();
-        GooglePlacesResponse response=null;
+        GetFourSquareResponse response=null;
         try {
-            response  = objectMapper.readValue((String)result, GooglePlacesResponse.class);
+            response  = objectMapper.readValue((String)result, GetFourSquareResponse.class);
         } catch (IOException e) {
             e.printStackTrace();
             Log.d("JSon error", "onPostExecute Exit");
@@ -72,22 +75,22 @@ public class GetNearbyPlacesData extends Interactor {
         if(response!=null)
         {
 
-            cache.setGooglePlaces(response.getResults());
+            cache.setSquarePlaces(response.getResponse().getVenues());
             success(null);
         }
     }
 
 
     private String getUrl(double latitude, double longitude) {
-        String Restaurant = "restaurant";
-        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-        googlePlacesUrl.append("location=" + latitude + "," + longitude);
-        googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
-        googlePlacesUrl.append("&type=" + Restaurant);
-        googlePlacesUrl.append("&sensor=true");
-        googlePlacesUrl.append("&key=" + "AIzaSyBMpOn88IgMg5ncPYy_M2eCxB9dEO8YHhc");
-        Log.d("getUrl", googlePlacesUrl.toString());
-        return (googlePlacesUrl.toString());
+       // foursquareRequestUrl = "https://api.foursquare.com/v2/venues/explore?client_id=YFRT0F0EKMLCUYYQO04YWQMUN15MXZH2KEXU5ZGN2D1QV0CF&client_secret=I2NQKHQPPL3DCCBTWU4PP4ZF2WJMGYZEOXIVXSHF0K330RJA&v=20130815%20&near=" + URLEncoder.encode(area, "UTF-8");
+
+        StringBuilder foursquarePlacesUrl = new StringBuilder("https://api.foursquare.com/v2/venues/search?");
+        foursquarePlacesUrl.append("ll=" + latitude + "," + longitude);
+        foursquarePlacesUrl.append("&categoryId=4d4b7105d754a06374d81259");
+        foursquarePlacesUrl.append("&oauth_token=" + "OY5TFSA5H4G4TTMS0UOYUTQWS22F13E5LTP35JV5DSULQJSD");
+        foursquarePlacesUrl.append("&client_id=YFRT0F0EKMLCUYYQO04YWQMUN15MXZH2KEXU5ZGN2D1QV0CF&client_secret=I2NQKHQPPL3DCCBTWU4PP4ZF2WJMGYZEOXIVXSHF0K330RJA&v=20130815%20");
+        Log.d("getUrl", foursquarePlacesUrl.toString());
+        return (foursquarePlacesUrl.toString());
     }
 
 }

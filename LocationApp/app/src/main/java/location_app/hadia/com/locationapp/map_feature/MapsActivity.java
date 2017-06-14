@@ -36,6 +36,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import location_app.hadia.com.locationapp.R;
 import location_app.hadia.com.locationapp.list_feature.LocationListActivity;
+import location_app.hadia.com.locationapp.model.FourSquarePlace;
 import location_app.hadia.com.locationapp.model.GooglePlace;
 import location_app.hadia.com.locationapp.place_details.PlaceDetailsActivity;
 import nucleus.factory.RequiresPresenter;
@@ -51,15 +52,16 @@ public class MapsActivity extends NucleusFragmentActivity<MapPresenterImpl> impl
     ProgressDialog progress;
     double latitude;
     double longitude;
+
 @BindView(R.id.list_btn)
+
     Button listBtn;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
     MapFragment mapFragment;
-    HashMap<String, String> mMarkerPlaceLink = new HashMap<String, String>();
-
+    HashMap<String, MarkerPlaceOpition> mMarkerPlaceLink = new HashMap<String, MarkerPlaceOpition>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,7 +280,41 @@ public class MapsActivity extends NucleusFragmentActivity<MapPresenterImpl> impl
     private void dismssProgressDiolag() {
         progress.dismiss();
     }
+    public void bindFourLocations(List<FourSquarePlace> nearbyPlacesList) {
+        for (int i = 0; i < nearbyPlacesList.size(); i++) {
+            Log.d("onPostExecute", "Entered into showing locations");
+            MarkerOptions markerOptions = new MarkerOptions();
+            final FourSquarePlace foursquarePlace = nearbyPlacesList.get(i);
+            double lat = foursquarePlace.getLatitude();
+            double lng = foursquarePlace.getLongitude();
+            String placeName = foursquarePlace.getName();
+            String vicinity = foursquarePlace.getVicinity();
+            LatLng latLng = new LatLng(lat, lng);
+            markerOptions.position(latLng);
+            markerOptions.title(placeName + " : " + vicinity);
 
+            Marker m = mMap.addMarker(markerOptions);
+
+
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            //move map camera
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+            // Linking Marker id and place reference
+            if(mMarkerPlaceLink.containsKey(m.getId()));
+            mMarkerPlaceLink.put(m.getId(), new MarkerPlaceOpition(""+foursquarePlace.getIndex(),false));
+            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+
+                @Override
+                public void onInfoWindowClick(Marker arg0) {
+                    openDetails(arg0.getId() );
+                }
+            });
+        }
+
+        listBtn.setVisibility(View.VISIBLE);
+
+    }
     public void bindLocations(List<GooglePlace> nearbyPlacesList) {
         for (int i = 0; i < nearbyPlacesList.size(); i++) {
             Log.d("onPostExecute", "Entered into showing locations");
@@ -293,18 +329,6 @@ public class MapsActivity extends NucleusFragmentActivity<MapPresenterImpl> impl
             markerOptions.title(placeName + " : " + vicinity);
 
             Marker m = mMap.addMarker(markerOptions);
-            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-
-                @Override
-                public void onInfoWindowClick(Marker arg0) {
-
-                    Intent myIntent = new Intent(MapsActivity.this, PlaceDetailsActivity.class);
-                    String reference = mMarkerPlaceLink.get(arg0.getId());
-                    myIntent.putExtra("key", reference); //Optional parameters
-                    MapsActivity.this.startActivity(myIntent);
-
-                }
-            });
 
 
             markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
@@ -312,31 +336,41 @@ public class MapsActivity extends NucleusFragmentActivity<MapPresenterImpl> impl
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
             mMap.animateCamera(CameraUpdateFactory.zoomTo(11));
             // Linking Marker id and place reference
-            mMarkerPlaceLink.put(m.getId(), googlePlace.getId());
+            if(mMarkerPlaceLink.containsKey(m.getId()));
+             mMarkerPlaceLink.put(m.getId(), new MarkerPlaceOpition(googlePlace.getId(),true));
             mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 
                 @Override
                 public void onInfoWindowClick(Marker arg0) {
-                    Intent intent = new Intent(getBaseContext(), PlaceDetailsActivity.class);
-                    String reference = mMarkerPlaceLink.get(arg0.getId());
-                    Log.d("onClick", reference);
-                    intent.putExtra("reference", reference);
-
-
-                    // Starting the Place Details Activity
-                    startActivity(intent);
+                    openDetails(arg0.getId() );
+//                    Intent intent = new Intent(getBaseContext(), PlaceDetailsActivity.class);
+//                    String reference = mMarkerPlaceLink.get(arg0.getId()).getMarkerId();
+//                    Log.d("onClick", reference);
+//                    intent.putExtra("reference", reference);
+//                    // Starting the Place Details Activity
+//                    startActivity(intent);
                 }
             });
         }
         if (progress != null)
             dismssProgressDiolag();
         ;
-        listBtn.setVisibility(View.VISIBLE);
+       listBtn.setVisibility(View.VISIBLE);
 
     }
     @OnClick(R.id.list_btn)
     void onClick(View v) {
         Intent intent = new Intent(getBaseContext(), LocationListActivity.class);
+        // Starting the Place Details Activity
+        startActivity(intent);
+    }
+    private void openDetails(String key )
+    {
+        Intent intent = new Intent(getBaseContext(), PlaceDetailsActivity.class);
+        String reference = mMarkerPlaceLink.get(key).getMarkerId();
+        Log.d("onClick", reference);
+        intent.putExtra("reference", reference);
+        intent.putExtra("isGoogle", mMarkerPlaceLink.get(key).isGooglePlace());
         // Starting the Place Details Activity
         startActivity(intent);
     }

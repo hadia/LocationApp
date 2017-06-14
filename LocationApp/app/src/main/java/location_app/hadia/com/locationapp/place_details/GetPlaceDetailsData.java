@@ -65,7 +65,7 @@ public class GetPlaceDetailsData extends Interactor<GetplaceDetailsResponse> {
     private String getUrl(String placeID) {
         StringBuilder sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
         sb.append("placeid="+placeID);
-        sb.append("&key=AIzaSyATuUiZUkEc_UgHuqsBJa1oqaODI-3mLs0");
+        sb.append("&key=" + "AIzaSyBMpOn88IgMg5ncPYy_M2eCxB9dEO8YHhc");
 
         return (sb.toString());
     }

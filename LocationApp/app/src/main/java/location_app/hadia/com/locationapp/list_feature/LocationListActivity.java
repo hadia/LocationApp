@@ -12,7 +12,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import location_app.hadia.com.locationapp.R;
+import location_app.hadia.com.locationapp.model.FourSquarePlace;
 import location_app.hadia.com.locationapp.model.GooglePlace;
+import location_app.hadia.com.locationapp.model.PlaceModel;
 import location_app.hadia.com.locationapp.place_details.PlaceDetailsActivity;
 import nucleus.factory.RequiresPresenter;
 import nucleus.view.NucleusAppCompatActivity;
@@ -27,7 +29,7 @@ import nucleus.view.NucleusAppCompatActivity;
 @RequiresPresenter(LocationListPresenter.class)
 public class LocationListActivity extends NucleusAppCompatActivity<LocationListPresenter> {
     @BindView(R.id.rv)
-    RecyclerView rv ;
+    RecyclerView rv;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,20 +39,18 @@ public class LocationListActivity extends NucleusAppCompatActivity<LocationListP
         rv.setLayoutManager(new LinearLayoutManager(this));
 
     }
-    public void bindLocations(List<GooglePlace> nearbyPlacesList)
-    {
-        LocationListAdapter adapter = new LocationListAdapter(nearbyPlacesList, new OnItemClickListener() {
+
+    public void bindLocations(List<GooglePlace> nearbyPlacesList, List<FourSquarePlace> fourSquarePlaceList) {
+        LocationListAdapter adapter = new LocationListAdapter(nearbyPlacesList, fourSquarePlaceList, new OnItemClickListener() {
             @Override
-            public void onItemClick(GooglePlace item) {
-                Intent intent = new Intent(getBaseContext(), PlaceDetailsActivity.class);
-                String reference = item.getId();
-                Log.d("onClick", reference);
-                intent.putExtra("reference", reference);
-
-
-                // Starting the Place Details Activity
-                startActivity(intent);
+            public void onItemClick(PlaceModel item) {
+                if (item instanceof GooglePlace)
+                    openDetails("" + item.getId(), true);
+                else
+                    openDetails("" + ((FourSquarePlace) item).getIndex(), false);
             }
+
+
         });
 
         rv.setAdapter(adapter);
@@ -58,5 +58,15 @@ public class LocationListActivity extends NucleusAppCompatActivity<LocationListP
         rv.requestFocus();
         rv.setVisibility(View.VISIBLE);
 
+    }
+
+    private void openDetails(String key, boolean isGoogle) {
+        Intent intent = new Intent(getBaseContext(), PlaceDetailsActivity.class);
+
+        Log.d("onClick", key);
+        intent.putExtra("reference", key);
+        intent.putExtra("isGoogle", isGoogle);
+        // Starting the Place Details Activity
+        startActivity(intent);
     }
 }
